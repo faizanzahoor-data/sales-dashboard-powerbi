@@ -1,0 +1,24 @@
+category,measure_name,dax_formula,notes
+Sales & Revenue,Total Sales,Total Sales = SUM('Amazon Sales Data'[Total Sales]),Core revenue measure
+Sales & Revenue,Total Quantity,Total Quantity = SUM('Amazon Sales Data'[Quantity]),Units sold
+Sales & Revenue,Average Unit Price,Average Unit Price = AVERAGE('Amazon Sales Data'[Unit Price]),Simple average listed price
+Sales & Revenue,Sales per Unit,"Sales per Unit = DIVIDE([Total Sales], [Total Quantity])",Realized price per unit after discount
+Sales & Revenue,% of Total Sales,"% of Total Sales = DIVIDE([Total Sales], CALCULATE([Total Sales], ALL('Amazon Sales Data')))",Share of grand total; use in category/region breakdowns
+Orders,Total Orders,Total Orders = DISTINCTCOUNT('Amazon Sales Data'[Order ID]),Unique order count
+Orders,Average Order Value,"Average Order Value = DIVIDE([Total Sales], [Total Orders])",AOV
+Orders,Cancelled Orders,"Cancelled Orders = CALCULATE([Total Orders], 'Amazon Sales Data'[Order Status] = ""Cancelled"")",
+Orders,Delivered Orders,"Delivered Orders = CALCULATE([Total Orders], 'Amazon Sales Data'[Order Status] = ""Delivered"")",
+Orders,Processing Orders,"Processing Orders = CALCULATE([Total Orders], 'Amazon Sales Data'[Order Status] = ""Processing"")",
+Orders,Shipped Orders,"Shipped Orders = CALCULATE([Total Orders], 'Amazon Sales Data'[Order Status] = ""Shipped"")",
+Orders,Cancellation Rate %,"Cancellation Rate % = DIVIDE([Cancelled Orders], [Total Orders])",Format as percentage
+Discounts,Total Discount Amount,"Total Discount Amount = SUMX('Amazon Sales Data', 'Amazon Sales Data'[Unit Price] * 'Amazon Sales Data'[Quantity] * 'Amazon Sales Data'[Discount])",Discount value given back to customers
+Discounts,Avg Discount %,Avg Discount % = AVERAGE('Amazon Sales Data'[Discount]),Format as percentage
+Returns,Returned Orders,"Returned Orders = CALCULATE([Total Orders], 'Amazon Sales Data'[Return Status] IN {""Yes"", ""Returned""})",Handles both return-flag values in the raw data
+Returns,Return Rate %,"Return Rate % = DIVIDE([Returned Orders], [Total Orders])",Format as percentage
+Ratings,Average Rating,Average Rating = AVERAGE('Amazon Sales Data'[Rating]),Ignores blank ratings automatically
+Ratings,Rated Orders,"Rated Orders = COUNTROWS(FILTER('Amazon Sales Data', NOT ISBLANK('Amazon Sales Data'[Rating])))",Count of orders that actually received a rating
+Time Intelligence,Sales LY,"Sales LY = CALCULATE([Total Sales], SAMEPERIODLASTYEAR('Date'[Date]))","Requires a proper Date table marked as a Date table, related to Order Date"
+Time Intelligence,Sales YoY %,"Sales YoY % = DIVIDE([Total Sales] - [Sales LY], [Sales LY])",Format as percentage
+Time Intelligence,Sales MTD,"Sales MTD = TOTALMTD([Total Sales], 'Date'[Date])",
+Time Intelligence,Sales YTD,"Sales YTD = TOTALYTD([Total Sales], 'Date'[Date])",
+Time Intelligence,Sales QTD,"Sales QTD = TOTALQTD([Total Sales], 'Date'[Date])",
